@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EmployeeManagement.API/EmployeeManagement.API.csproj" Id="60497531-ccdf-434c-aa57-5d4ce11c5132" />
+  <Project Path="EmployeeManagement.Tests/EmployeeManagement.Tests.csproj" Id="68e49e55-2256-4f2d-bcac-f700a8a883a7" />
+</Solution>
