@@ -1,6 +1,6 @@
 namespace EmployeeManagement.API
 {
-    public class Employee
+    public class EmployeeModel
     {
         public Guid Id { get; set; }
 

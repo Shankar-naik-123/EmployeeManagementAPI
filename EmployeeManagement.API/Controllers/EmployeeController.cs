@@ -6,30 +6,36 @@ namespace EmployeeManagement.API.Controllers
     [Route("[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private static List<Employee> employees = new List<Employee>
+        private static List<EmployeeModel> employees = new List<EmployeeModel>
         {
-            new Employee { Id = Guid.NewGuid(), Name = "John Doe", Designation = "Software Engineer", Adresss = "123 Main St", ServiceYears = 5 },
-            new Employee { Id = Guid.NewGuid(), Name = "Jane Smith", Designation = "Project Manager", Adresss = "456 Elm St", ServiceYears = 8 },
-            new Employee { Id = Guid.NewGuid(), Name = "Alice Johnson", Designation = "QA Analyst", Adresss = "789 Oak St", ServiceYears = 3 }
+            new EmployeeModel { Id = Guid.NewGuid(), Name = "John Doe", Designation = "Software Engineer", Adresss = "123 Main St", ServiceYears = 5 },
+            new EmployeeModel { Id = Guid.NewGuid(), Name = "Jane Smith", Designation = "Project Manager", Adresss = "456 Elm St", ServiceYears = 8 },
+            new EmployeeModel { Id = Guid.NewGuid(), Name = "Alice Johnson", Designation = "QA Analyst", Adresss = "789 Oak St", ServiceYears = 3 }
         };
 
         [HttpGet(Name = "GetEmployees")]
-        public IEnumerable<Employee> GetEmployees()
+        public IEnumerable<EmployeeModel> GetEmployees()
         {
             return employees;
         }
 
 
         [HttpPost("add")]
-        public IActionResult AddEmployee([FromBody] Employee newEmployee)
+        public IActionResult AddEmployee([FromBody] EmployeeDto newEmployee)
         {
             if (newEmployee == null)
                 return BadRequest();
+            var employeemodel = new EmployeeModel
+            {
+                Id = Guid.NewGuid(),
+                Name = newEmployee.Name,
+                Designation = newEmployee.Designation,
+                Adresss = newEmployee.Adresss,
+                ServiceYears = newEmployee.ServiceYears,
+            };
+            employees.Add(employeemodel);
 
-            newEmployee.Id = Guid.NewGuid();
-            employees.Add(newEmployee);
-
-            return CreatedAtAction(nameof(GetEmployees), new { id = newEmployee.Id }, newEmployee);
+            return Ok("Created!");
         }
     }
 }
