@@ -1,0 +1,28 @@
+trigger:
+- master
+
+variables:
+ configuration: Release
+variables:
+ configuration: Release 
+stages:
+ - stage: Build Backend App
+   jobs:
+     - job: Build and Test and Create Build Artifact
+       pool:
+        vmImage: ubuntu-latest
+       steps:
+        - checkout: self
+        - task: UseDotNet@2
+          inputs:
+            packageType: sdk
+            version: '10.0.x'
+        - script: dotnet restore     
+        - script: dotnet build -c $(configuration) 
+        - script: dotnet test --no-build
+        - script: dotnet publish  EmployeeManagement.API/EmployeeManagement.API.csproj -c $(configuration) -o $(Build.ArtifactStagingDirectory)  
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: $(Build.ArtifactStagingDirectory)
+            ArtifactName: drop 
+
