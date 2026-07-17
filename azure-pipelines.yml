@@ -1,14 +1,11 @@
 trigger:
 - master
-
-variables:
- configuration: Release
 variables:
  configuration: Release 
 stages:
- - stage: Build Backend App
+ - stage: Build_Backend_App
    jobs:
-     - job: Build and Test and Create Build Artifact
+     - job: Build_And_Test_And_Create_Build_Artifact
        pool:
         vmImage: ubuntu-latest
        steps:
