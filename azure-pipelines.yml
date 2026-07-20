@@ -55,7 +55,7 @@ stages:
          arguements: 'configuration $(buildConfiguration)'
       - script: 'dotnet test --no-build'
         displayName: 'Excecuting UnitTest cases'
-      - script: dotnet publish 'EmployeeManagement.API/EmployeeManagement.API.csproj' -c $(buildConfiguration) -o $(build.ArtifactStagingDirectory)
+      - script: dotnet publish EmployeeManagement.API/EmployeeManagement.API.csproj -c $(buildConfiguration) -o $(build.ArtifactStagingDirectory)
         displayName: 'Publishing the projects'
       - task: PublishBuildArtifacts@1
         inputs:
