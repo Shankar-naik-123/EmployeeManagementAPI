@@ -1,25 +1,66 @@
+#Linux agent
+# trigger:
+# - master
+# variables:
+#  configuration: Release 
+# stages:
+#  - stage: Build_Backend_App
+#    jobs:
+#      - job: Build_And_Test_And_Create_Build_Artifact
+#        pool:
+#         vmImage: ubuntu-latest
+#        steps:
+#         - checkout: self
+#         - task: UseDotNet@2
+#           inputs:
+#             packageType: sdk
+#             version: '10.0.x'
+#         - script: dotnet restore     
+#         - script: dotnet build -c $(configuration) 
+#         - script: dotnet test --no-build
+#         - script: dotnet publish  EmployeeManagement.API/EmployeeManagement.API.csproj -c $(configuration) -o $(Build.ArtifactStagingDirectory)  
+#         - task: PublishBuildArtifacts@1
+#           inputs:
+#             PathtoPublish: $(Build.ArtifactStagingDirectory)
+#             ArtifactName: drop 
+
+#Windows agent
 trigger:
-- master
+  - master
+
 variables:
- configuration: Release 
+  buildConfiguration: Release
+
 stages:
- - stage: Build_Backend_App
-   jobs:
-     - job: Build_And_Test_And_Create_Build_Artifact
-       pool:
-        vmImage: ubuntu-latest
-       steps:
-        - checkout: self
-        - task: UseDotNet@2
-          inputs:
-            packageType: sdk
-            version: '10.0.x'
-        - script: dotnet restore     
-        - script: dotnet build -c $(configuration) 
-        - script: dotnet test --no-build
-        - script: dotnet publish  EmployeeManagement.API/EmployeeManagement.API.csproj -c $(configuration) -o $(Build.ArtifactStagingDirectory)  
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: $(Build.ArtifactStagingDirectory)
-            ArtifactName: drop 
+  - stage: Build_And_Test_And_Deploy
+    jobs:
+    - job:
+      pool:
+      vmImage: windows-latest
+      steps:
+      - checkout: self
+        DisplayName: "Checking out the code"
+      - task: UseDotNet@2
+        DisplayName: "Installing Dotnet Core sdk"
+        inputs:
+        packageType: sdk
+        version: 10.0.x
+      - script: dotnet restore
+        DisplayName: "restored all packages"
+      - task: DotNetCoreCli@2
+        DisplayName: "Building the projects"
+        inputs:
+        command: 'dotnet build'
+        projects: '**/*.csproj'
+        arguements: 'configuration $(buildConfiguration)'
+      - script: 'dotnet test --no-build'
+        DisplayName: "Excecuting UnitTest cases"
+      - script: dotnet publish './EmployeeManagement.API/EmployeeManagement.API.csproj' -c $(buildConfiguration) -o ($build.ArtifactStagingDirectory)
+        DisplayName: "Publishing the projects"
+      - task: PublishBuildArtifacts@1
+        inputs:
+        PathtoPublish: $(Build.ArtifactStagingDirectory)
+        ArtifactName: Drop  
+
+
 
