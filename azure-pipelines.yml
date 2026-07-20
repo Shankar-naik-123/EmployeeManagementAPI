@@ -43,8 +43,8 @@ stages:
       - task: UseDotNet@2
         displayName: "Installing Dotnet Core sdk"
         inputs:
-        packageType: sdk
-        version: 10.0.x
+         packageType: sdk
+         version: 10.0.x
       - script: dotnet restore
         displayName: "restored all packages"
       - task: DotNetCoreCli@2
