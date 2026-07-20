@@ -39,24 +39,24 @@ stages:
        vmImage: windows-latest
       steps:
       - checkout: self
-        DisplayName: "Checking out the code"
+        displayName: "Checking out the code"
       - task: UseDotNet@2
-        DisplayName: "Installing Dotnet Core sdk"
+        displayName: "Installing Dotnet Core sdk"
         inputs:
         packageType: sdk
         version: 10.0.x
       - script: dotnet restore
-        DisplayName: "restored all packages"
+        displayName: "restored all packages"
       - task: DotNetCoreCli@2
-        DisplayName: "Building the projects"
+        displayName: "Building the projects"
         inputs:
         command: 'dotnet build'
         projects: '**/*.csproj'
         arguements: 'configuration $(buildConfiguration)'
       - script: 'dotnet test --no-build'
-        DisplayName: "Excecuting UnitTest cases"
+        displayName: "Excecuting UnitTest cases"
       - script: dotnet publish './EmployeeManagement.API/EmployeeManagement.API.csproj' -c $(buildConfiguration) -o ($build.ArtifactStagingDirectory)
-        DisplayName: "Publishing the projects"
+        displayName: "Publishing the projects"
       - task: PublishBuildArtifacts@1
         inputs:
         PathtoPublish: $(Build.ArtifactStagingDirectory)
