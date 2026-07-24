@@ -36,7 +36,7 @@ stages:
     jobs:
     - job:
       pool:
-       vmImage: windows-latest
+       name: Selfhosted Pool
       steps:
       - checkout: self
         displayName: 'Checking out the code'
