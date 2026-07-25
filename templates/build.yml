@@ -15,7 +15,7 @@ stages:
     - script: dotnet build --configuration Release
     - script: dotnet test --no-build  
     - script: dotnet publish ./EmployeeManagement.API/EmployeeManagement.API.csproj -c Release -o $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts
+    - task: PublishBuildArtifacts@1
       inputs:
        PathtoPublish: $(Build.ArtifactStagingDirectory)
        ArtifactName: Drop
