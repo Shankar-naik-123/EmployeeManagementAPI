@@ -1,4 +1,4 @@
-Parameters:
+parameters:
 - name: configuration
   type: string
 - name: DotnetVersion
@@ -16,7 +16,7 @@ stages:
     - task: UseDotNet@2
       inputs:
        packageType: sdk
-       version: ${{Parameters.DotnetVersion}}
+       version: ${{Parameters.dotnetVersion}}
     - script: dotnet restore
     - script: dotnet build --configuration ${{Parameters.configuration}}
     - script: dotnet test --no-build  --configuration ${{Parameters.configuration}}
