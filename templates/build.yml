@@ -10,7 +10,7 @@ stages:
     - task: UseDotNet@2
       inputs:
        packageType: sdk
-       version: 10.0
+       version: 10.0.x
     - script: dotnet restore
     - script: dotnet build --configuration Release
     - script: dotnet test --no-build  
