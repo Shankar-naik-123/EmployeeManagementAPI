@@ -4,6 +4,6 @@ trigger:
       - master
 
 stages:
-- templates: ./templates/build.yml
+- template: templates/build.yml
 
          
