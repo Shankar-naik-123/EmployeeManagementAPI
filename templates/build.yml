@@ -13,7 +13,7 @@ stages:
        version: 10.0.x
     - script: dotnet restore
     - script: dotnet build --configuration Release
-    - script: dotnet test --no-build  
+    - script: dotnet test --no-build  --configuration Release
     - script: dotnet publish ./EmployeeManagement.API/EmployeeManagement.API.csproj -c Release -o $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
