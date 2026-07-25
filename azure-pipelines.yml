@@ -5,5 +5,8 @@ trigger:
 
 stages:
 - template: templates/build.yml
+  Parameters:
+    configuration: Release
+    DotnetVersion: 10.0.x
 
          

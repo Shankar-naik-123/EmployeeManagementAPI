@@ -1,3 +1,9 @@
+Parameters:
+- name: configuration
+  type: string
+- name: DotnetVersion
+  type: string
+
 stages:
 - stage: Build
   displayName: Build and Test the Solution
@@ -10,11 +16,11 @@ stages:
     - task: UseDotNet@2
       inputs:
        packageType: sdk
-       version: 10.0.x
+       version: ${{Parameters.DotnetVersion}}
     - script: dotnet restore
-    - script: dotnet build --configuration Release
-    - script: dotnet test --no-build  --configuration Release
-    - script: dotnet publish ./EmployeeManagement.API/EmployeeManagement.API.csproj -c Release -o $(Build.ArtifactStagingDirectory)
+    - script: dotnet build --configuration ${{Parameters.configuration}}
+    - script: dotnet test --no-build  --configuration ${{Parameters.configuration}}
+    - script: dotnet publish ./EmployeeManagement.API/EmployeeManagement.API.csproj -c ${{Parameters.configuration}} -o $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
        PathtoPublish: $(Build.ArtifactStagingDirectory)
