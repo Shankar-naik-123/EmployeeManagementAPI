@@ -4,19 +4,19 @@ stages:
   jobs:
   - job: compile
     pool:
-    name: Selfhosted Pool
+     name: Selfhosted Pool
     steps:
     - checkout: self
     - task: UseDotNet@2
       inputs:
-      packageType: sdk
-      version: 10.0
+       packageType: sdk
+       version: 10.0
     - script: dotnet restore
     - script: dotnet build --configuration Release
     - script: dotnet test --no-build  
     - script: dotnet publish ./EmployeeManagement.API/EmployeeManagement.API.csproj -c Release -o $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts
       inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)
-      ArtifactName: Drop
+       PathtoPublish: $(Build.ArtifactStagingDirectory)
+       ArtifactName: Drop
 
