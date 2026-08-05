@@ -1,12 +1,30 @@
 trigger:
   branches:
     include:
-      - master
+      - main
 
+name: $(Date:yyyyMMdd).$(Rev:r)
+
+variables:
+  - group: Common
 stages:
-- template: templates/build.yml
-  parameters:
-    configuration: Release
-    dotnetVersion: 10.0.x
+  - template: templates/build.yml
+  
+  - template: template/deploy.yml
+    parameters:
+      environment: Development
+      variableGroup: dev
+      dependsOn: build
 
-         
+  - template: template/deploy.yml
+    parameters:
+      environment: Qa
+      variableGroup: qa
+      dependsOn: deploy_development
+        
+  - template: template/deploy.yml
+    parameters:
+      environment: Production
+      variableGroup: Prod
+      dependsOn: deploy_qa  
+    
