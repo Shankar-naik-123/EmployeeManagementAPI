@@ -19,20 +19,20 @@ stages:
           displayName: 'restore dependencies'
           inputs: 
             command: 'restore'
-            projects: '**/*.sln'
+            projects: '*.slnx'
             
         - task: DotnetCoreCLI@2
           displayName: 'compile the code'  
           inputs: 
             command: 'build'
-            projects: '**/*.sln'
+            projects: '*.slnx'
             arguements: '--no-restore --configuration $(buildConfiguration)'
 
         - task: DotnetCoreCLI@2
           displayName: 'Test'
           inputs:
             command: 'test'
-            projects: '**/tests/*.csproj'
+            projects: '*.slnx'
             publishTestResults: false
             arguements: >
               --no-build 
