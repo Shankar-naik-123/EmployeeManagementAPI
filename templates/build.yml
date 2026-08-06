@@ -47,7 +47,7 @@ stages:
             testResultsFiles: '**/*.trx'
             failTaskOnFailedTests: true
             
-        - task: PublishCodeCoverage@2
+        - task: PublishCodeCoverageResults@2
           displayName: 'Publish Coverage Results'
           inputs:
             codeCoverageTool: 'Cobertura'
@@ -60,7 +60,7 @@ stages:
             publishWebProject: true
             argurements: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
         
-        - task: PublishBuildArtifact@1
+        - task: PublishBuildArtifacts@1
           inputs: 
             pathToPublish: '$(Build.ArtifactStagingDirectory)'
             artifactName: 'drop'  
