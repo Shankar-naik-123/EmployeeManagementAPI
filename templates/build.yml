@@ -41,7 +41,7 @@ stages:
               --logger trx
             
         - task: PublishTestResults@2
-          displaName: 'Publish Test Results'
+          displayName: 'Publish Test Results'
           inputs:
             testResultsFormat: 'VSTest'
             testResultsFiles: '**/*.trx'
