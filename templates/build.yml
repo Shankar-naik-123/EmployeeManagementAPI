@@ -5,64 +5,65 @@ stages:
     - job: 
       displayName: 'Build,test and publish'
       pool:
-        name: 'x'
+        name: 'Self Pools'
       steps:
-        - task: UseDotnet@2
+        - task: UseDotNet@2
           inputs:
-            packageType: sdk
+            packageType: 'sdk'
             version: '$(dotnet_version)'
         
         - checkout: self
-            #clean
+          clean: true
         
-        - task: DotnetCoreCli@2
+        - task: DotnetCoreCLI@2
           displayName: 'restore dependencies'
           inputs: 
             command: 'restore'
             projects: '**/*.sln'
             
-        - task: DotnetCoreCli@2
+        - task: DotnetCoreCLI@2
           displayName: 'compile the code'  
           inputs: 
             command: 'build'
             projects: '**/*.sln'
             arguements: '--no-restore --configuration $(buildConfiguration)'
 
-        - task: DotnetCoreCli@2
+        - task: DotnetCoreCLI@2
           displayName: 'Test'
           inputs:
             command: 'test'
-            projects: '**/tests/*.Tests.csproj'
+            projects: '**/tests/*.csproj'
             publishTestResults: false
             arguements: >
             --no-build 
             --configuration $(buildConfiguration)
-            --collect:'XPlat Code Coverage'
+            --collect:"XPlat Code Coverage"
             --logger trx
             
-        - task: PublishTestsResults@2
+        - task: PublishTestResults@2
           displaName: 'Publish Test Results'
           inputs:
-            testResultsFormat: 'VSTS'
-            testResultsFile: '$(Agent.TempDirectory)/**/*.trx'
+            testResultsFormat: 'VSTest'
+            testResultsFiles: '**/*.trx'
+            failTaskOnFailedTests: true
             
         - task: PublishCodeCoverage@2
           displayName: 'Publish Coverage Results'
           inputs:
-            codeCoverageTool: 'Coburtura'
-            codeCoverageTemplate: 'coverage.coburtura.xml'
+            codeCoverageTool: 'Cobertura'
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
               
-        - task: DotnetCoreCli@2
+        - task: DotnetCoreCLI@2
            displayName: 'Publish the compiled the code'
-           publishWebProject: true
            inputs:
               command: 'publish'
-              argurements: '--no-build --output $(Build.ArtifactStagingDirectory)'
+              publishWebProject: true
+              argurements: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
         
-        - task: PublishBuildArtifact@2
+        - task: PublishBuildArtifact@1
           inputs: 
-            artifactPath: $(Build.ArtifactStagingDirectory)
-            artifactName: drop  
+            pathToPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'drop'  
               
               
             

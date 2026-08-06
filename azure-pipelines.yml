@@ -10,21 +10,21 @@ variables:
 stages:
   - template: templates/build.yml
   
-  - template: template/deploy.yml
-    parameters:
-      environment: Development
-      variableGroup: dev
-      dependsOn: build
-
-  - template: template/deploy.yml
-    parameters:
-      environment: Qa
-      variableGroup: qa
-      dependsOn: deploy_development
-        
-  - template: template/deploy.yml
-    parameters:
-      environment: Production
-      variableGroup: Prod
-      dependsOn: deploy_qa  
+#  - template: template/deploy.yml
+#    parameters:
+#      environment: Development
+#      variableGroup: Dev
+#      dependsOn: build
+#
+#  - template: template/deploy.yml
+#    parameters:
+#      environment: Qa
+#      variableGroup: QA
+#      dependsOn: deploy_development
+#        
+#  - template: template/deploy.yml
+#    parameters:
+#      environment: Production
+#      variableGroup: Prod
+#      dependsOn: deploy_qa  
     
