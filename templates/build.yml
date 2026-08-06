@@ -35,10 +35,10 @@ stages:
             projects: '**/tests/*.csproj'
             publishTestResults: false
             arguements: >
-            --no-build 
-            --configuration $(buildConfiguration)
-            --collect:"XPlat Code Coverage"
-            --logger trx
+              --no-build 
+              --configuration $(buildConfiguration)
+              --collect:"XPlat Code Coverage"
+              --logger trx
             
         - task: PublishTestResults@2
           displaName: 'Publish Test Results'
