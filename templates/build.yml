@@ -54,11 +54,11 @@ stages:
             summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
               
         - task: DotnetCoreCLI@2
-           displayName: 'Publish the compiled the code'
-           inputs:
-              command: 'publish'
-              publishWebProject: true
-              argurements: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
+          displayName: 'Publish the compiled the code'
+          inputs:
+            command: 'publish'
+            publishWebProject: true
+            argurements: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
         
         - task: PublishBuildArtifact@1
           inputs: 
