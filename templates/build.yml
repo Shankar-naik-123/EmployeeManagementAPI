@@ -1,6 +1,6 @@
 
 stages:
-  stage: Build
+- stage: Build
   jobs: 
     - job: 
       displayName: 'Build,test and publish'
