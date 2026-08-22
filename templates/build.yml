@@ -58,9 +58,9 @@ stages:
           inputs:
             command: 'publish'
             publishWebProject: true
-            arguements: '--configuration $(buildConfiguration) --no-build --output $(build.ArtifactStagingDirectory)'
+            arguements: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifacts@1 
           displayName: 'Upload artifact'
           inputs:
-            pathToPublish: '$(build.ArtifactStagingDirectory)'
+            pathToPublish: '$(Build.ArtifactStagingDirectory)'
             artifactName: drop
