@@ -54,13 +54,13 @@ stages:
             summaryFileLocation: '$(Agent.tempDirectory)/**/coverage.coburtura.xml'
           
         - task: DotNetCoreCLI@2
-          displaName: 'Publish project'
+          displayName: 'Publish project'
           inputs:
             command: 'publish'
             publishWebProject: true
             arguements: '--configuration $(buildConfiguration) --no-build --output $(build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifact@1 
-          displaName: 'Upload artifact'
+          displayName: 'Upload artifact'
           inputs:
             pathToPublish: '$(build.ArtifactStagingDirectory)'
             artifactName: drop
