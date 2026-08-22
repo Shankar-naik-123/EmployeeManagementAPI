@@ -40,27 +40,27 @@ stages:
               --collect:"XPlat Code Coverage"
               --logger trx
                 
-          - task: PublishTestResults@2     
-            displayName: 'Publish Test results'
-            inputs:
-              testResultsFormat: 'VSTest'
-              testResultsFiles: '**/*.trx'
-              failTaskOnFailedTests: true
+        - task: PublishTestResults@2     
+          displayName: 'Publish Test results'
+          inputs:
+            testResultsFormat: 'VSTest'
+            testResultsFiles: '**/*.trx'
+            failTaskOnFailedTests: true
               
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish code coverage results'
-            inputs:
-              codeCoverageTool: 'Cobertura'
-              summaryFileLocation: '$(Agent.tempDirectory)/**/coverage.coburtura.xml'
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish code coverage results'
+          inputs:
+            codeCoverageTool: 'Cobertura'
+            summaryFileLocation: '$(Agent.tempDirectory)/**/coverage.coburtura.xml'
           
-          - task: DotNetCoreCLI@2
-            displaName: 'Publish project'
-            inputs:
-              command: 'publish'
-              publishWebProject: true
-              arguements: '--configuration $(buildConfiguration) --no-build --output $(build.ArtifactStagingDirectory)'
-          - task: PublishBuildArtifact@1 
-            displaName: 'Upload artifact'
-            inputs:
-              pathToPublish: '$(build.ArtifactStagingDirectory)'
-              artifactName: drop
+        - task: DotNetCoreCLI@2
+          displaName: 'Publish project'
+          inputs:
+            command: 'publish'
+            publishWebProject: true
+            arguements: '--configuration $(buildConfiguration) --no-build --output $(build.ArtifactStagingDirectory)'
+        - task: PublishBuildArtifact@1 
+          displaName: 'Upload artifact'
+          inputs:
+            pathToPublish: '$(build.ArtifactStagingDirectory)'
+            artifactName: drop
