@@ -6,7 +6,7 @@ stages:
       pool:
         name: 'Self Pools'
       steps:
-        - Task: UseDotNet@2
+        - task: UseDotNet@2
           inputs:
             packageType: 'sdk'
             version: '$(dotnet_version)'
@@ -14,13 +14,13 @@ stages:
         - checkout: self
           clean: true
           
-        - Task: DotNetCoreCLI@2
+        - task: DotNetCoreCLI@2
           displayName: 'Restore dependencies'
           inputs:
             command: 'restore'
             projects: '*.sln'
               
-        - Task: DotNetCoreCLI@2
+        - task: DotNetCoreCLI@2
           displayName: 'Build the solution'
           inputs:
             command: 'build'
@@ -28,7 +28,7 @@ stages:
             arguements: '--no-restore --configuration $(buildConfiguration)'
                
                
-        - Task: DotNetCoreCLI@2
+        - task: DotNetCoreCLI@2
           displayName: 'Run Test cases'
           input:
             command: 'test'
@@ -40,26 +40,26 @@ stages:
               --collect:"XPlat Code Coverage"
               --logger trx
                 
-          - Task: PublishTestResults@2     
+          - task: PublishTestResults@2     
             displayName: 'Publish Test results'
             input:
               testResultsFormat: 'VSTest'
               testResultsFiles: '**/*.trx'
-              failTaskOnFailedTests: true
+              failtaskOnFailedTests: true
               
-          - Task: PublishCodeCoverageResults@2
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish code coverage results'
             input:
               codeCoverageTool: 'Cobertura'
               summaryFileLocation: '$(Agent.tempDirectory)/**/coverage.coburtura.xml'
           
-          - Task: DotNetCoreCLI@2
+          - task: DotNetCoreCLI@2
             displaName: 'Publish project'
             inputs:
               command: 'publish'
               publishWebProject: true
               arguements: '--configuration $(buildConfiguration) --no-build --output $(build.ArtifactStagingDirectory)'
-          - Task: PublishBuildArtifact@1 
+          - task: PublishBuildArtifact@1 
             displaName: 'Upload artifact'
             inputs:
               pathToPublish: '$(build.ArtifactStagingDirectory)'
