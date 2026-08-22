@@ -1,0 +1,69 @@
+
+stages:
+- stage: Build
+  jobs: 
+    - job: 
+      displayName: 'Build,test and publish'
+      pool:
+        name: 'Self Pools'
+      steps:
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '$(dotnet_version)'
+        
+        - checkout: self
+          clean: true
+        
+        - task: DotnetCoreCLI@2
+          displayName: 'restore dependencies'
+          inputs: 
+            command: 'restore'
+            projects: '*.slnx'
+            
+        - task: DotnetCoreCLI@2
+          displayName: 'compile the code'  
+          inputs: 
+            command: 'build'
+            projects: '*.slnx'
+            arguments: '--no-restore --configuration $(buildConfiguration)'
+
+        - task: DotnetCoreCLI@2
+          displayName: 'Test'
+          inputs:
+            command: 'test'
+            projects: '*.slnx'
+            publishTestResults: false
+            arguments: >
+              --no-build 
+              --configuration $(buildConfiguration)
+              --collect:"XPlat Code Coverage"
+              --logger trx
+            
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results'
+          inputs:
+            testResultsFormat: 'VSTest'
+            testResultsFiles: '**/*.trx'
+            failTaskOnFailedTests: true
+            
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish Coverage Results'
+          inputs:
+            codeCoverageTool: 'Cobertura'
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+              
+        - task: DotnetCoreCLI@2
+          displayName: 'Publish the compiled the code'
+          inputs:
+            command: 'publish'
+            publishWebProject: true
+            arguments: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
+        
+        - task: PublishBuildArtifacts@1
+          inputs: 
+            pathToPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'drop'   
+              
+              
+            

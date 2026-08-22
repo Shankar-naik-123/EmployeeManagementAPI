@@ -2,29 +2,13 @@ trigger:
   branches:
     include:
       - master
-
-name: $(Date:yyyyMMdd).$(Rev:r)
+    
+name: $(Date:yyyyMMdd).$(Rev:r)  
 
 variables:
   - group: Common
+    
 stages:
   - template: templates/build.yml
-  
-#  - template: template/deploy.yml
-#    parameters:
-#      environment: Development
-#      variableGroup: Dev
-#      dependsOn: build
-#
-#  - template: template/deploy.yml
-#    parameters:
-#      environment: Qa
-#      variableGroup: QA
-#      dependsOn: deploy_development
-#        
-#  - template: template/deploy.yml
-#    parameters:
-#      environment: Production
-#      variableGroup: Prod
-#      dependsOn: deploy_qa  
     
+   

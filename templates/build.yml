@@ -1,69 +1,66 @@
-
 stages:
-- stage: Build
-  jobs: 
-    - job: 
-      displayName: 'Build,test and publish'
-      pool:
-        name: 'Self Pools'
-      steps:
-        - task: UseDotNet@2
-          inputs:
-            packageType: 'sdk'
-            version: '$(dotnet_version)'
-        
-        - checkout: self
-          clean: true
-        
-        - task: DotnetCoreCLI@2
-          displayName: 'restore dependencies'
-          inputs: 
-            command: 'restore'
-            projects: '*.slnx'
-            
-        - task: DotnetCoreCLI@2
-          displayName: 'compile the code'  
-          inputs: 
-            command: 'build'
-            projects: '*.slnx'
-            arguments: '--no-restore --configuration $(buildConfiguration)'
-
-        - task: DotnetCoreCLI@2
-          displayName: 'Test'
-          inputs:
-            command: 'test'
-            projects: '*.slnx'
-            publishTestResults: false
-            arguments: >
-              --no-build 
-              --configuration $(buildConfiguration)
-              --collect:"XPlat Code Coverage"
-              --logger trx
-            
-        - task: PublishTestResults@2
-          displayName: 'Publish Test Results'
-          inputs:
-            testResultsFormat: 'VSTest'
-            testResultsFiles: '**/*.trx'
-            failTaskOnFailedTests: true
-            
-        - task: PublishCodeCoverageResults@2
-          displayName: 'Publish Coverage Results'
-          inputs:
-            codeCoverageTool: 'Cobertura'
-            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+- stage: build
+      jobs:
+      - job: build
+        displayName: 'Build, test and publish'
+        pool:
+          name: 'Self Pools'
+        steps:
+          - Task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '$(dotnet_version)'
+          
+          - checkout: self
+            clean: true
+          
+          - Task: DotNetCoreCLI@2
+            displayName: 'Restore dependencies'
+            inputs:
+              command: 'restore'
+              projects: '*.sln'
               
-        - task: DotnetCoreCLI@2
-          displayName: 'Publish the compiled the code'
-          inputs:
-            command: 'publish'
-            publishWebProject: true
-            arguments: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
-        
-        - task: PublishBuildArtifacts@1
-          inputs: 
-            pathToPublish: '$(Build.ArtifactStagingDirectory)'
-            artifactName: 'drop'   
+          - Task: DotNetCoreCLI@2
+            displayName: 'Build the solution'
+            inputs:
+               command: 'build'
+               projects: '*.sln'
+               arguements: '--no-restore --configuration $(buildConfiguration)'
+               
+               
+          - Task: DotNetCoreCLI@2
+            displayName: 'Run Test cases'
+            input:
+              command: 'test'
+              projects: '*.sln'
+              publishTestResults: false
+              arguements: >
+                --no-build
+                --configuration $(buildConfiguration)
+                --collect:"XPlat Code Coverage"
+                --logger trx
+                
+          - Task: PublishTestResults@2     
+            displayName: 'Publish Test results'
+            input:
+              testResultsFormat: 'VSTest'
+              testResultsFiles: '**/*.trx'
+              failTaskOnFailedTests: true
               
-              
-            
+          - Task: PublishCodeCoverageResults@2
+            displayName: 'Publish code coverage results'
+            input:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: '$(Agent.tempDirectory)/**/coverage.coburtura.xml'
+          
+          - Task: DotNetCoreCLI@2
+            displaName: 'Publish project'
+            inputs:
+              command: 'publish'
+              publishWebProject: true
+              arguements: '--configuration $(buildConfiguration) --no-build --output $(build.ArtifactStagingDirectory)'
+          - Task: PublishBuildArtifact@1 
+            displaName: 'Upload artifact'
+            inputs:
+              pathToPublish: '$(build.ArtifactStagingDirectory)'
+              artifactName: drop
