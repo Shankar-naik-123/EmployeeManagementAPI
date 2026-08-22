@@ -18,13 +18,13 @@ stages:
           displayName: 'Restore dependencies'
           inputs:
             command: 'restore'
-            projects: '*.sln'
+            projects: '*.slnx'
               
         - task: DotNetCoreCLI@2
           displayName: 'Build the solution'
           inputs:
             command: 'build'
-            projects: '*.sln'
+            projects: '*.slnx'
             arguements: '--no-restore --configuration $(buildConfiguration)'
                
                
@@ -32,7 +32,7 @@ stages:
           displayName: 'Run Test cases'
           inputs:
             command: 'test'
-            projects: '*.sln'
+            projects: '*.slnx'
             publishTestResults: false
             arguements: >
               --no-build
