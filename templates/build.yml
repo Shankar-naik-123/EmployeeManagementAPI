@@ -30,7 +30,7 @@ stages:
                
         - task: DotNetCoreCLI@2
           displayName: 'Run Test cases'
-          input:
+          inputs:
             command: 'test'
             projects: '*.sln'
             publishTestResults: false
@@ -42,14 +42,14 @@ stages:
                 
           - task: PublishTestResults@2     
             displayName: 'Publish Test results'
-            input:
+            inputs:
               testResultsFormat: 'VSTest'
               testResultsFiles: '**/*.trx'
-              failtaskOnFailedTests: true
+              failTaskOnFailedTests: true
               
           - task: PublishCodeCoverageResults@2
             displayName: 'Publish code coverage results'
-            input:
+            inputs:
               codeCoverageTool: 'Cobertura'
               summaryFileLocation: '$(Agent.tempDirectory)/**/coverage.coburtura.xml'
           
