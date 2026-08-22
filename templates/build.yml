@@ -1,44 +1,44 @@
 stages:
 - stage: build
-      jobs:
-      - job: build
-        displayName: 'Build, test and publish'
-        pool:
-          name: 'Self Pools'
-        steps:
-          - Task: UseDotNet@2
-            inputs:
-              packageType: 'sdk'
-              version: '$(dotnet_version)'
+  jobs:
+    - job: build
+      displayName: 'Build, test and publish'
+      pool:
+        name: 'Self Pools'
+      steps:
+        - Task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '$(dotnet_version)'
           
-          - checkout: self
-            clean: true
+        - checkout: self
+          clean: true
           
-          - Task: DotNetCoreCLI@2
-            displayName: 'Restore dependencies'
-            inputs:
-              command: 'restore'
-              projects: '*.sln'
+        - Task: DotNetCoreCLI@2
+          displayName: 'Restore dependencies'
+          inputs:
+            command: 'restore'
+            projects: '*.sln'
               
-          - Task: DotNetCoreCLI@2
-            displayName: 'Build the solution'
-            inputs:
-               command: 'build'
-               projects: '*.sln'
-               arguements: '--no-restore --configuration $(buildConfiguration)'
+        - Task: DotNetCoreCLI@2
+          displayName: 'Build the solution'
+          inputs:
+            command: 'build'
+            projects: '*.sln'
+            arguements: '--no-restore --configuration $(buildConfiguration)'
                
                
-          - Task: DotNetCoreCLI@2
-            displayName: 'Run Test cases'
-            input:
-              command: 'test'
-              projects: '*.sln'
-              publishTestResults: false
-              arguements: >
-                --no-build
-                --configuration $(buildConfiguration)
-                --collect:"XPlat Code Coverage"
-                --logger trx
+        - Task: DotNetCoreCLI@2
+          displayName: 'Run Test cases'
+          input:
+            command: 'test'
+            projects: '*.sln'
+            publishTestResults: false
+            arguements: >
+              --no-build
+              --configuration $(buildConfiguration)
+              --collect:"XPlat Code Coverage"
+              --logger trx
                 
           - Task: PublishTestResults@2     
             displayName: 'Publish Test results'
