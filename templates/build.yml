@@ -25,7 +25,7 @@ stages:
           inputs:
             command: 'build'
             projects: '*.slnx'
-            arguements: '--no-restore --configuration $(buildConfiguration)'
+            arguments: '--no-restore --configuration $(buildConfiguration)'
                
                
         - task: DotNetCoreCLI@2
@@ -34,7 +34,7 @@ stages:
             command: 'test'
             projects: '*.slnx'
             publishTestResults: false
-            arguements: >
+            arguments: >
               --no-build
               --configuration $(buildConfiguration)
               --collect:"XPlat Code Coverage"
@@ -51,14 +51,14 @@ stages:
           displayName: 'Publish code coverage results'
           inputs:
             codeCoverageTool: 'Cobertura'
-            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.coburtura.xml'
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
           
         - task: DotNetCoreCLI@2
           displayName: 'Publish project'
           inputs:
             command: 'publish'
             publishWebProject: true
-            arguements: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifacts@1 
           displayName: 'Upload artifact'
           inputs:
