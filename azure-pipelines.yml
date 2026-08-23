@@ -22,7 +22,7 @@ stages:
     parameters:
       environment: QA-Environment
       variableGroup: QA
-      dependsOn: Deploy_Development
+      dependsOn: Deploy_Dev
 
   - template: templates/deploy.yml
     parameters:

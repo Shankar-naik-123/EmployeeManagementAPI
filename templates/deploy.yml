@@ -8,8 +8,8 @@ parameters:
     default: Build
     
 stages:
-- stage: Deploy_${{parameters.environment}}
-  displayName: 'Deploy to ${{parameters.environment}}'
+- stage: Deploy_${{parameters.variableGroup}}
+  displayName: 'Deploy to ${{parameters.variableGroup}}'
   dependsOn: ${{parameters.dependsOn}}
   variables:
   - group: ${{parameters.variableGroup}}
