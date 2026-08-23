@@ -26,8 +26,7 @@ stages:
             command: 'build'
             projects: '*.slnx'
             arguments: '--no-restore --configuration $(buildConfiguration)'
-               
-               
+                           
         - task: DotNetCoreCLI@2
           displayName: 'Run Test cases'
           inputs:
