@@ -12,6 +12,7 @@ stages:
   - template: templates/build.yml
   
 #  - template: templates/deploy.yml
+
 #    parameters:
 #      envionment: Dev-Environment
 #      variableGroup: Dev
