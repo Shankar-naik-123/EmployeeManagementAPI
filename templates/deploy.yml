@@ -1,0 +1,33 @@
+parameters:
+  - name: environment
+    type: string
+  - name: variableGroup
+    type: string
+  - name: dependsOn
+    type: string
+    default: Build
+    
+stages:
+  stage: Deploy_${{parameters.environment}}
+  displayName: 'Deploy to ${{parameters.environment}}'
+  dependsOn: ${{parameters.dependsOn}}
+  variables:
+    - group: ${{parameters.variableGroup}}
+  jobs:
+    deployment: WebApi
+    environment: ${{parameters.environment}}
+    strategy:
+      runsOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - Task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App'
+            inputs:
+              azureSubscription: $(serviceconnection)
+              appType: 'webApp'
+              appName: $(appservicename)
+              package: $(Pipeline.Workspace)/drop/**/*.zip
+            
+    
