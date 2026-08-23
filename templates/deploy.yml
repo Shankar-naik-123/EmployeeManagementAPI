@@ -22,7 +22,7 @@ stages:
           steps:
           - download: current
             artifact: drop
-          - Task: AzureWebApp@1
+          - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App'
             inputs:
               azureSubscription: $(serviceconnection)
