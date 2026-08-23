@@ -8,13 +8,13 @@ parameters:
     default: Build
     
 stages:
-  stage: Deploy_${{parameters.environment}}
+- stage: Deploy_${{parameters.environment}}
   displayName: 'Deploy to ${{parameters.environment}}'
   dependsOn: ${{parameters.dependsOn}}
   variables:
-    - group: ${{parameters.variableGroup}}
+  - group: ${{parameters.variableGroup}}
   jobs:
-    deployment: WebApi
+  - deployment: WebApi
     environment: ${{parameters.environment}}
     strategy:
       runsOnce:
