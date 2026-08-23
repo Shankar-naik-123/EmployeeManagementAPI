@@ -17,7 +17,7 @@ stages:
   - deployment: WebApi
     environment: ${{parameters.environment}}
     strategy:
-      runsOnce:
+      runOnce:
         deploy:
           steps:
           - download: current
