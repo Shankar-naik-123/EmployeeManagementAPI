@@ -34,7 +34,7 @@ stages:
         displayName: 'Prepare sonar analysis'
         inputs:
           sonarCloud: "sonarcloud-connection"
-          organization: "shankarnaik-sonar-org"
+          organization: "shankarnaik-sonar-org-key"
           scannerMode: 'dotnet'
           projectkey: "shankarnaik-org_EmployeeManagementAPI"
           projectName: "EmployeeManagementAPI"
