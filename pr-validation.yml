@@ -1,0 +1,84 @@
+trigger: none
+  
+pr:
+  branches:
+    include:
+      - master
+  
+variables:
+  - group: Common
+
+stages: 
+  stage: validate_Pr
+  displayName: 'Validate the PR'
+  jobs:
+    job: PR_Validation
+    pool:
+      name: 'Self Pools'
+    steps:
+      - checkout: self
+        clean: true
+        
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '$(dotnet_version)' 
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Restore dependencies'
+        inputs:
+          command: 'restore'
+          projects: '*.slnx'
+            
+      - task: SonarCloudPrepare@3
+        displayName: 'Prepare sonar analysis'
+        inputs:
+          sonarCloud: "sonarcloud-connection"
+          organization: "shankarnaik-sonar-org"
+          scannerMode: 'dotnet'
+          projectkey: "shankarnaik-org_EmployeeManagementAPI"
+          projectName: "EmployeeManagementAPI"
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Build the solution'
+        inputs:
+          command: 'build'
+          projects: '*.slnx'
+          arguments: '--no-restore --configuration $(buildConfiguration)'
+          
+      - task: DotNetCoreCLI@2
+        displayName: 'Run Test cases'
+        inputs:
+          command: 'test'
+          projects: '*.slnx'
+          publishTestResults: false
+          arguments: >
+            --no-build
+            --configuration $(buildConfiguration)
+            --collect:"XPlat Code Coverage"
+            --logger trx
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test results'
+        condition:  succeededOrFailed()
+        inputs:
+          testResultsFormat: 'VSTest'
+          testResultsFiles: '**/*.trx'
+          failTaskOnFailedTests: true
+
+      - task: PublishCodeCoverageResults@2
+        displayName: 'Publish code coverage results'
+        condition:  succeededOrFailed()
+        inputs:
+          codeCoverageTool: 'Cobertura'
+          summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+          
+      - task: SonarCloudAnalyze@3
+        displayName: 'Run the sonar cloud analysis'
+        
+      # Wait for SonarCloud Quality Gate result
+      - task: SonarCloudPublish@3
+        display: 'Publish sonar cloud quality gate'
+        inputs:
+          pollingTimeoutSec: '300'
+          
