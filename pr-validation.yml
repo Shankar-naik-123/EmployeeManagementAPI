@@ -14,7 +14,7 @@ stages:
   jobs:
   - job: PR_Validation
     pool:
-      name: 'Self Pools'
+      vmImage: 'windows-latest'
     steps:
       - checkout: self
         clean: true
