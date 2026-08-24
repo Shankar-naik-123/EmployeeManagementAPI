@@ -9,10 +9,10 @@ variables:
   - group: Common
 
 stages: 
-  stage: validate_Pr
+- stage: validate_Pr
   displayName: 'Validate the PR'
   jobs:
-    job: PR_Validation
+  - job: PR_Validation
     pool:
       name: 'Self Pools'
     steps:
