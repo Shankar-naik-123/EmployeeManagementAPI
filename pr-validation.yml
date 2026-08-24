@@ -78,7 +78,7 @@ stages:
         
       # Wait for SonarCloud Quality Gate result
       - task: SonarCloudPublish@3
-        display: 'Publish sonar cloud quality gate'
+        displayName: 'Publish sonar cloud quality gate'
         inputs:
           pollingTimeoutSec: '300'
           
