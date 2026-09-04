@@ -22,7 +22,7 @@ jobs:
         run: dotnet build --no-restore --configuration release
           
       - name: "Run Test cases"  
-        run: dotnet test --no-build --configuration release
+        run: dotnet test --no-build --configuration release 
         
         
         
