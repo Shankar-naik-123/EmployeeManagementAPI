@@ -1,6 +1,6 @@
 on:
   pull_request:
-    banches:
+    branches:
       - master
 
 name: "Github CI CD"
