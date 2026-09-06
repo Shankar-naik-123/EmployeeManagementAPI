@@ -26,6 +26,25 @@ jobs:
         run: dotnet build --no-restore --configuration ${{env.build-configuration}}
           
       - name: Test the solution
-        run: dotnet test --no-build --configuration ${{env.build-configuration}}
-        
+        run: >
+          dotnet test 
+          --no-build 
+          --configuration ${{env.build-configuration}}
+          --collect:"XPlat Code Coverage"
+          --logger 'trx' 
+          
+      - name: publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with: 
+          name: test-results
+          path: "**/*.trx"
+            
+      - name: publish coverage results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage
+          path: "**/coverage.cobertura.xml"      
+          
   
