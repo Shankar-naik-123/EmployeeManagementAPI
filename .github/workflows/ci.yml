@@ -1,4 +1,4 @@
-On:
+on:
   pull-request:
     banches:
       - master
