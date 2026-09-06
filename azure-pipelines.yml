@@ -1,8 +1,8 @@
-#trigger:
-#  branches:
-#    include:
-#      - master
-#    
+trigger:
+  branches:
+    include:
+      - master
+
 name: $(Date:yyyyMMdd).$(Rev:r)  
 
 variables:
